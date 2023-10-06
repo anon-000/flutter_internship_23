@@ -1,7 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/pages/next_page.dart';
+import 'package:flutter_demo/utils/sharedpreference_helper.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lottie/lottie.dart';
 
 ///
 /// Created by Auro on 25/09/23 at 9:09 AM
@@ -147,6 +149,67 @@ class _HomePageState extends State<HomePage>
               }
             },
             icon: const Icon(Icons.search),
+          ),
+          IconButton(
+            onPressed: () async {
+              showDialog(
+                context: context,
+                builder: (c) => Dialog(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: Text(
+                            "Are you sure you want to logout?",
+                            style: TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: OutlinedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text("No"),
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    // code for logout'
+                                    SharedPreferenceHelper.preferences!.clear();
+                                    Navigator.pushNamedAndRemoveUntil(
+                                      context,
+                                      '/login-page',
+                                      (r) => false,
+                                    );
+                                  },
+                                  child: const Text("Yes"),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+            icon: const Icon(Icons.logout),
           ),
         ],
       ),
@@ -335,7 +398,7 @@ class _HomePageState extends State<HomePage>
       //   ],
       // ),
 
-      body: Column(
+      body: ListView(
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 16, bottom: 10),
@@ -387,7 +450,9 @@ class _HomePageState extends State<HomePage>
               },
             ).toList(),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
+          Lottie.asset('assets/icons/animation.json'),
+          const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,
             child: Padding(
@@ -396,10 +461,42 @@ class _HomePageState extends State<HomePage>
                 onPressed: () {
                   Navigator.pushNamed(context, '/new-page');
                 },
-                child: Text("New Page"),
+                child: const Text("New Page"),
               ),
             ),
           ),
+          SizedBox(
+            width: double.infinity,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      content: Text("Hello world"),
+                      margin: EdgeInsets.all(16),
+                      // clipBehavior: Clip.antiAlias,
+                    ),
+                  );
+                },
+                child: const Text("Show SnackBar.."),
+              ),
+            ),
+          ),
+          Container(
+            decoration: const BoxDecoration(
+              color: Colors.black,
+              shape: BoxShape.circle,
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: Image.network(
+              "https://images.unsplash.com/photo-1500964757637-c85e8a162699?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YmVhdXRpZnVsJTIwbGFuZHNjYXBlfGVufDB8fDB8fHww&w=1000&q=80",
+              height: 150,
+              width: 150,
+              fit: BoxFit.cover,
+            ),
+          )
         ],
       ),
 
