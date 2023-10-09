@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/pages/api_call/api_call_page.dart';
 import 'package:flutter_demo/pages/home/home_page.dart';
 import 'package:flutter_demo/pages/login/login_page.dart';
 import 'package:flutter_demo/pages/new_page.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         '/home-page': (context) => const HomePage(),
         '/next-page': (context) => const NextPage(),
         '/new-page': (context) => const NewPage(),
+        '/api-call-page': (context) => const ApiCallPage(),
       },
     );
   }
