@@ -5,6 +5,7 @@ import 'package:flutter_demo/pages/login/login_page.dart';
 import 'package:flutter_demo/pages/new_page.dart';
 import 'package:flutter_demo/pages/next_page.dart';
 import 'package:flutter_demo/pages/splash/splash_page.dart';
+import 'package:flutter_demo/pages/weather_api/weather_api_page.dart';
 import 'package:flutter_demo/utils/sharedpreference_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         '/next-page': (context) => const NextPage(),
         '/new-page': (context) => const NewPage(),
         '/api-call-page': (context) => const ApiCallPage(),
+        '/weather-api-page': (context) => const WeatherApiPage(),
       },
     );
   }

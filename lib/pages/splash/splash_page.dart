@@ -26,7 +26,7 @@ class _SplashPageState extends State<SplashPage> {
 
         Navigator.pushNamed(
           context,
-          '/api-call-page',
+          '/home-page',
         );
 
         // final user = SharedPreferenceHelper.user;

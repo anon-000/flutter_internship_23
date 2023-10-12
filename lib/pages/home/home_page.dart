@@ -450,9 +450,21 @@ class _HomePageState extends State<HomePage>
               },
             ).toList(),
           ),
+          SizedBox(
+            width: double.infinity,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/weather-api-page');
+                },
+                child: const Text("Weather API Page"),
+              ),
+            ),
+          ),
           const SizedBox(height: 16),
-          Lottie.asset('assets/icons/animation.json'),
-          const SizedBox(height: 16),
+          // Lottie.asset('assets/icons/animation.json'),
+          // const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,
             child: Padding(
