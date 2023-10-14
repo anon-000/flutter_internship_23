@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/pages/api_call/api_call_page.dart';
 import 'package:flutter_demo/pages/home/home_page.dart';
+import 'package:flutter_demo/pages/layout_example/layout_example_page.dart';
 import 'package:flutter_demo/pages/login/login_page.dart';
 import 'package:flutter_demo/pages/new_page.dart';
 import 'package:flutter_demo/pages/next_page.dart';
@@ -28,15 +29,17 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       // home: const HomePage(),
-      initialRoute: '/',
+      initialRoute: '/layout-page',
       routes: {
-        '/': (context) => const SplashPage(),
+        '/layout-page': (context) => const LayoutExamplePage(),
+        '/': (context) => const LayoutExamplePage(),
         '/login-page': (context) => const LoginPage(),
         '/home-page': (context) => const HomePage(),
         '/next-page': (context) => const NextPage(),
         '/new-page': (context) => const NewPage(),
         '/api-call-page': (context) => const ApiCallPage(),
         '/weather-api-page': (context) => const WeatherApiPage(),
+
       },
     );
   }

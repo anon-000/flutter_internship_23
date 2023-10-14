@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/data_models/weather.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 ///
 /// Created by Auro on 12/10/23 at 9:24 PM
@@ -100,7 +101,11 @@ class _WeatherApiPageState extends State<WeatherApiPage> {
                 : Text(
                     weatherDatum == null
                         ? ""
-                        : "${weatherDatum!.main!.toJson()}",
+                        : DateFormat("dd MMMM yyyy /// hh mm a").format(
+                            DateTime.fromMillisecondsSinceEpoch(
+                              weatherDatum!.sys!.sunrise! * 1000,
+                            ),
+                          ),
                     style: const TextStyle(
                       fontSize: 18,
                     ),

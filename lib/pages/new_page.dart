@@ -137,6 +137,20 @@ class _NewPageState extends State<NewPage> {
               ),
             ),
           ),
+          Row(
+            children: [
+              CustomListTile(data[0]),
+              CustomListTile(data[1]),
+              CustomListTile(data[2]),
+            ],
+          ),
+          Row(
+            children: oldData
+                .map(
+                  (e) => CustomListTile(e),
+                )
+                .toList(),
+          ),
           SizedBox(
             width: double.infinity,
             height: 50,
