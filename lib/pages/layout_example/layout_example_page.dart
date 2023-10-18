@@ -148,7 +148,12 @@ class _LayoutExamplePageState extends State<LayoutExamplePage> {
                       ),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/api-call-page',
+                    );
+                  },
                   child: const Text(
                     "Learn more",
                     style: TextStyle(

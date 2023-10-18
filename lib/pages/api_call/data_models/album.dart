@@ -25,7 +25,7 @@ class AlbumDatum {
   });
 
   factory AlbumDatum.fromJson(Map<String, dynamic> json) => AlbumDatum(
-    userId: json["userId"],
+    userId: int.parse("${json["userId"]}"),
     id: json["id"],
     title: json["title"],
   );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/pages/api_call/add_album_page.dart';
 import 'package:flutter_demo/pages/api_call/api_call_page.dart';
+import 'package:flutter_demo/pages/api_call/edit_album_page.dart';
 import 'package:flutter_demo/pages/home/home_page.dart';
 import 'package:flutter_demo/pages/layout_example/layout_example_page.dart';
 import 'package:flutter_demo/pages/login/login_page.dart';
@@ -39,7 +41,8 @@ class MyApp extends StatelessWidget {
         '/new-page': (context) => const NewPage(),
         '/api-call-page': (context) => const ApiCallPage(),
         '/weather-api-page': (context) => const WeatherApiPage(),
-
+        '/add-album-page': (context) => const AddAlbumPage(),
+        '/edit-album-page': (context) => const EditAlbumPage(),
       },
     );
   }
