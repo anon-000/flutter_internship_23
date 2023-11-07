@@ -23,26 +23,25 @@ class _SplashPageState extends State<SplashPage> {
   checkForUser() async {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Future.delayed(const Duration(seconds: 2)).then((value) {
+        // Navigator.pushNamed(
+        //   context,
+        //   '/home-page',
+        // );
 
-        Navigator.pushNamed(
-          context,
-          '/home-page',
-        );
-
-        // final user = SharedPreferenceHelper.user;
-        // if (user == null) {
-        //   Navigator.pushNamedAndRemoveUntil(
-        //     context,
-        //     '/login-page',
-        //     (r) => false,
-        //   );
-        // } else {
-        //   Navigator.pushNamedAndRemoveUntil(
-        //     context,
-        //     '/home-page',
-        //     (r) => false,
-        //   );
-        // }
+        final authenticatedData = SharedPreferenceHelper.authenticationData;
+        if (authenticatedData == null) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/welcome-page',
+            (r) => false,
+          );
+        } else {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/home-page',
+            (r) => false,
+          );
+        }
       });
     });
   }

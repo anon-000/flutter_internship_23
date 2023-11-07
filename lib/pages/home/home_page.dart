@@ -193,7 +193,7 @@ class _HomePageState extends State<HomePage>
                                     SharedPreferenceHelper.preferences!.clear();
                                     Navigator.pushNamedAndRemoveUntil(
                                       context,
-                                      '/login-page',
+                                      '/welcome-page',
                                       (r) => false,
                                     );
                                   },

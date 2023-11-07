@@ -3,28 +3,31 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/data_models/authentication.dart';
+import 'package:flutter_demo/data_models/user.dart';
 import 'package:flutter_demo/utils/sharedpreference_helper.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:http/http.dart' as http;
 
 ///
-/// Created by Auro on 06/10/23 at 10:28 PM
+/// Created by Auro on 07/11/23 at 10:10 PM
 ///
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpPageState extends State<SignUpPage> {
+  String name = '';
   String email = '';
   String password = '';
+
   bool loading = false;
 
-  Future<void> handleLogin() async {
+  Future<void> handleSignUp() async {
     try {
       setState(() {
         loading = true;
@@ -32,6 +35,7 @@ class _LoginPageState extends State<LoginPage> {
       final encoding = Encoding.getByName('utf-8');
       final headers = {'Content-Type': 'application/json'};
       Map<String, dynamic> body = {
+        "name": name,
         "email": email,
         "password": password,
         "deviceId": "sdlfusfefsmnfsfsd",
@@ -39,7 +43,6 @@ class _LoginPageState extends State<LoginPage> {
         "deviceName": "Realerme",
         "fcmId": "woiruwejlkfnslkfjsdf",
         "role": 3,
-        "strategy": "local",
       };
       String jsonBody = json.encode(body);
 
@@ -47,14 +50,14 @@ class _LoginPageState extends State<LoginPage> {
 
       final response = await http.post(
         Uri.parse(
-          "https://api.dev.thepatchupindia.in/v1/authenticate",
+          "https://api.dev.thepatchupindia.in/v1/user",
         ),
         body: jsonBody,
         headers: headers,
         encoding: encoding,
       );
 
-      log("LOGIN API CALL RESPONSE : ${response.body}");
+      log("SIGNUP API CALL RESPONSE : ${response.body}");
 
       setState(() {
         loading = false;
@@ -63,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
       if (response.statusCode == 201) {
         /// show success msg
         ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Logged In successfully")));
+            const SnackBar(content: Text("Account created successfully")));
 
         final parsedResponse =
             AuthenticationDatum.fromJson(jsonDecode(response.body));
@@ -99,13 +102,25 @@ class _LoginPageState extends State<LoginPage> {
           const SizedBox(height: 10),
           const Center(
             child: Text(
-              "Login Page",
+              "Sign Up Page",
               style: TextStyle(
                 fontSize: 18,
               ),
             ),
           ),
           const SizedBox(height: 20),
+          TextField(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: "Name",
+            ),
+            onChanged: (c) {
+              setState(() {
+                name = c;
+              });
+            },
+          ),
+          const SizedBox(height: 10),
           TextField(
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
@@ -133,9 +148,10 @@ class _LoginPageState extends State<LoginPage> {
           loading
               ? const Center(child: CircularProgressIndicator())
               : ElevatedButton(
-                  onPressed:
-                      email.isEmpty || password.isEmpty ? null : handleLogin,
-                  child: const Text("Login"),
+                  onPressed: name.isEmpty || password.isEmpty || email.isEmpty
+                      ? null
+                      : handleSignUp,
+                  child: const Text("Sign Up"),
                 )
         ],
       ),

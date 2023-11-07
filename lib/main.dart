@@ -7,8 +7,10 @@ import 'package:flutter_demo/pages/layout_example/layout_example_page.dart';
 import 'package:flutter_demo/pages/login/login_page.dart';
 import 'package:flutter_demo/pages/new_page.dart';
 import 'package:flutter_demo/pages/next_page.dart';
+import 'package:flutter_demo/pages/sign_up/signup_page.dart';
 import 'package:flutter_demo/pages/splash/splash_page.dart';
 import 'package:flutter_demo/pages/weather_api/weather_api_page.dart';
+import 'package:flutter_demo/pages/welcome/welcome_page.dart';
 import 'package:flutter_demo/utils/sharedpreference_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,11 +33,13 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       // home: const HomePage(),
-      initialRoute: '/layout-page',
+      initialRoute: '/',
       routes: {
         '/layout-page': (context) => const LayoutExamplePage(),
-        '/': (context) => const LayoutExamplePage(),
+        '/': (context) => const SplashPage(),
+        '/welcome-page': (context) => const WelcomePage(),
         '/login-page': (context) => const LoginPage(),
+        '/signup-page': (context) => const SignUpPage(),
         '/home-page': (context) => const HomePage(),
         '/next-page': (context) => const NextPage(),
         '/new-page': (context) => const NewPage(),
