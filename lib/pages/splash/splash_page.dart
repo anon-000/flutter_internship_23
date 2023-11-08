@@ -38,7 +38,7 @@ class _SplashPageState extends State<SplashPage> {
         } else {
           Navigator.pushNamedAndRemoveUntil(
             context,
-            '/home-page',
+            '/dashboard-page',
             (r) => false,
           );
         }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo/pages/api_call/add_album_page.dart';
 import 'package:flutter_demo/pages/api_call/api_call_page.dart';
 import 'package:flutter_demo/pages/api_call/edit_album_page.dart';
+import 'package:flutter_demo/pages/dashboard/dashboard_page.dart';
 import 'package:flutter_demo/pages/home/home_page.dart';
 import 'package:flutter_demo/pages/layout_example/layout_example_page.dart';
 import 'package:flutter_demo/pages/login/login_page.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const SplashPage(),
         '/welcome-page': (context) => const WelcomePage(),
         '/login-page': (context) => const LoginPage(),
+        '/dashboard-page': (context) => const DashboardPage(),
         '/signup-page': (context) => const SignUpPage(),
         '/home-page': (context) => const HomePage(),
         '/next-page': (context) => const NextPage(),
