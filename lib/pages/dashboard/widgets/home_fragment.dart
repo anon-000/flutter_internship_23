@@ -28,8 +28,8 @@ class _HomeFragmentState extends State<HomeFragment> {
 
   Future<List<BlogDatum>?> getAllBlogs() async {
     try {
-      final response = await http.get(
-          Uri.parse('https://api.dev.thepatchupindia.in/v1/blog?\$limit=-1'));
+      final response = await http.get(Uri.parse(
+          'https://api.dev.thepatchupindia.in/v1/blog?\$limit=-1&\$populate=createdBy&\$sort[createdAt]=-1'));
 
       if (response.statusCode == 200) {
         // log("RESPONSE  : : ${jsonDecode(response.body)}");
@@ -51,57 +51,75 @@ class _HomeFragmentState extends State<HomeFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        AppBar(
-          elevation: 0,
-          title: const Text(
-            "Home",
-            style: TextStyle(
-              color: Colors.black,
+    return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          ///create-blog-page
+          final res = await Navigator.pushNamed(
+            context,
+            '/create-blog-page',
+          );
+          if (res != null) {
+            setState(() {
+              futureBlog = getAllBlogs();
+            });
+          }
+        },
+        label: Text('Create'),
+        icon: Icon(Icons.add),
+      ),
+      body: Column(
+        children: [
+          AppBar(
+            elevation: 0,
+            title: const Text(
+              "Home",
+              style: TextStyle(
+                color: Colors.black,
+              ),
             ),
+            backgroundColor: Colors.white,
           ),
-          backgroundColor: Colors.white,
-        ),
-        Expanded(
-          child: RefreshIndicator(
-            onRefresh: () async {
-              setState(() {
-                futureBlog = getAllBlogs();
-              });
-            },
-            child: FutureBuilder(
-              future: futureBlog,
-              builder: (ctx, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  // If we got an error
-                  if (snapshot.hasError) {
-                    return Center(
-                      child: Text(
-                        '${snapshot.error} occurred',
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                    );
-                    // if we got our data
-                  } else if (snapshot.hasData) {
-                    // Extracting data from snapshot object
-                    final data = snapshot.data as List<BlogDatum>;
-                    return ListView.separated(
-                      padding: const EdgeInsets.all(16),
-                      itemCount: data.length,
-                      separatorBuilder: (c, i) => const SizedBox(height: 16),
-                      itemBuilder: (c, i) => BlogCard(data[i]),
-                    );
-                  }
-                }
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: () async {
+                setState(() {
+                  futureBlog = getAllBlogs();
+                });
               },
+              child: FutureBuilder(
+                future: futureBlog,
+                builder: (ctx, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    // If we got an error
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text(
+                          '${snapshot.error} occurred',
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      );
+                      // if we got our data
+                    } else if (snapshot.hasData) {
+                      // Extracting data from snapshot object
+                      final data = snapshot.data as List<BlogDatum>;
+                      return ListView.separated(
+                        padding: const EdgeInsets.all(16),
+                        itemCount: data.length,
+                        separatorBuilder: (c, i) => const SizedBox(height: 16),
+                        itemBuilder: (c, i) => BlogCard(data[i]),
+                      );
+                    }
+                  }
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

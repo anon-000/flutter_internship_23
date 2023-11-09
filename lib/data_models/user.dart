@@ -12,32 +12,48 @@ String userToJson(User data) => json.encode(data.toJson());
 
 class User {
   String? name;
-  String? gender;
-  String? password;
+  String? email;
+  int? role;
+  int? status;
+  String? id;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  int? v;
 
   User({
     this.name,
-    this.gender,
-    this.password,
+    this.email,
+    this.role,
+    this.status,
+    this.id,
+    this.createdAt,
+    this.updatedAt,
+    this.v,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-        name: json["name"],
-        gender: json["gender"],
-        password: json["password"],
-      );
+    name: json["name"],
+    email: json["email"],
+    role: json["role"],
+    status: json["status"],
+    id: json["_id"],
+    createdAt: json["createdAt"] == null
+        ? null
+        : DateTime.parse(json["createdAt"]),
+    updatedAt: json["updatedAt"] == null
+        ? null
+        : DateTime.parse(json["updatedAt"]),
+    v: json["__v"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "name": name,
-        "gender": gender,
-        "password": password,
-      };
+    "name": name,
+    "email": email,
+    "role": role,
+    "status": status,
+    "_id": id,
+    "createdAt": createdAt?.toIso8601String(),
+    "updatedAt": updatedAt?.toIso8601String(),
+    "__v": v,
+  };
 }
-
-/// "{"name": "Auro", "gender": "Male"}"
-
-// final user = User(name: 'auro', gender: 'male');
-//
-// String a = userToJson(user);
-//
-// User b = userFromJson(a);

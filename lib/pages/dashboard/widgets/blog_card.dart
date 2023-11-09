@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/data_models/blog.dart';
+import 'package:intl/intl.dart';
 
 ///
 /// Created by Auro on 08/11/23 at 10:16 PM
@@ -33,6 +34,7 @@ class BlogCard extends StatelessWidget {
             "${datum.attachment}",
             fit: BoxFit.cover,
             height: 300,
+            width: double.infinity,
           ),
           const SizedBox(height: 10),
           Padding(
@@ -49,7 +51,7 @@ class BlogCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
-              "by ${datum.createdBy}",
+              "written by ${datum.createdBy!.name} on ${DateFormat("dd MMM yyyy").format(datum.createdAt!)}",
               style: const TextStyle(),
             ),
           ),

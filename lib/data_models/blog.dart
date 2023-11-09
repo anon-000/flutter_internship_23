@@ -8,6 +8,9 @@
 
 import 'dart:convert';
 
+import 'package:flutter_demo/data_models/authentication.dart';
+import 'package:flutter_demo/data_models/user.dart';
+
 BlogDatum blogDatumFromJson(String str) => BlogDatum.fromJson(json.decode(str));
 
 String blogDatumToJson(BlogDatum data) => json.encode(data.toJson());
@@ -17,7 +20,7 @@ class BlogDatum {
   String? title;
   String? description;
   String? attachment;
-  String? createdBy;
+  User? createdBy;
   DateTime? createdAt;
   DateTime? updatedAt;
   int? v;
@@ -38,7 +41,8 @@ class BlogDatum {
         title: json["title"],
         description: json["description"],
         attachment: json["attachment"],
-        createdBy: json["createdBy"],
+        createdBy:
+            json["createdBy"] == null ? null : User.fromJson(json["createdBy"]),
         createdAt: json["createdAt"] == null
             ? null
             : DateTime.parse(json["createdAt"]),
@@ -53,7 +57,7 @@ class BlogDatum {
         "title": title,
         "description": description,
         "attachment": attachment,
-        "createdBy": createdBy,
+        "createdBy": createdBy!.toJson(),
         "createdAt": createdAt?.toIso8601String(),
         "updatedAt": updatedAt?.toIso8601String(),
         "__v": v,
