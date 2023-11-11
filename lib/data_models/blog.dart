@@ -8,7 +8,6 @@
 
 import 'dart:convert';
 
-import 'package:flutter_demo/data_models/authentication.dart';
 import 'package:flutter_demo/data_models/user.dart';
 
 BlogDatum blogDatumFromJson(String str) => BlogDatum.fromJson(json.decode(str));

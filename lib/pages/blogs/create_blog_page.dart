@@ -75,7 +75,7 @@ class _CreateBlogPageState extends State<CreateBlogPage> {
         "title": title,
         "description": description,
         "attachment": url,
-        "createdBy": "${SharedPreferenceHelper.authenticationData!.user!.id}"
+        "createdBy": "${SharedPreferenceHelper.authenticationData!.user!.id}",
       };
 
       String jsonBody = json.encode(body);
