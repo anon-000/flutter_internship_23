@@ -5,6 +5,7 @@ import 'package:flutter_demo/pages/api_call/edit_album_page.dart';
 import 'package:flutter_demo/pages/blogs/blog_details_page.dart';
 import 'package:flutter_demo/pages/blogs/create_blog_page.dart';
 import 'package:flutter_demo/pages/dashboard/dashboard_page.dart';
+import 'package:flutter_demo/pages/edit_profile/edit_profile_page.dart';
 import 'package:flutter_demo/pages/home/home_page.dart';
 import 'package:flutter_demo/pages/layout_example/layout_example_page.dart';
 import 'package:flutter_demo/pages/login/login_page.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
         '/welcome-page': (context) => const WelcomePage(),
         '/login-page': (context) => const LoginPage(),
         '/dashboard-page': (context) => const DashboardPage(),
+        '/edit-profile-page': (context) => const EditProfilePage(),
         '/signup-page': (context) => const SignUpPage(),
         '/home-page': (context) => const HomePage(),
         '/next-page': (context) => const NextPage(),

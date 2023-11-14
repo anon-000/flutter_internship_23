@@ -74,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
         /// GO TO HOME PAGE
         Navigator.pushNamed(
           context,
-          '/home-page',
+          '/dashboard-page',
         );
       } else {
         throw "${jsonDecode(response.body)['message']}";

@@ -13,6 +13,8 @@ String userToJson(User data) => json.encode(data.toJson());
 class User {
   String? name;
   String? email;
+  String? bio;
+  String? avatar;
   int? role;
   int? status;
   String? id;
@@ -25,6 +27,8 @@ class User {
     this.email,
     this.role,
     this.status,
+    this.bio,
+    this.avatar,
     this.id,
     this.createdAt,
     this.updatedAt,
@@ -35,6 +39,8 @@ class User {
     name: json["name"],
     email: json["email"],
     role: json["role"],
+    bio: json["bio"],
+    avatar: json["avatar"],
     status: json["status"],
     id: json["_id"],
     createdAt: json["createdAt"] == null
@@ -49,6 +55,8 @@ class User {
   Map<String, dynamic> toJson() => {
     "name": name,
     "email": email,
+    "bio": bio,
+    "avatar": avatar,
     "role": role,
     "status": status,
     "_id": id,
