@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/data_models/blog.dart';
 import 'package:flutter_demo/pages/dashboard/widgets/blog_card.dart';
@@ -48,6 +49,24 @@ class _HomeFragmentState extends State<HomeFragment> {
     }
   }
 
+  handleDeleteBlog(String blogId) async {
+    try {
+      final dio = Dio();
+      final response = await dio.delete(
+        "https://api.dev.thepatchupindia.in/v1/blog/$blogId",
+      );
+      if (response.statusCode == 200) {
+        setState(() {
+          futureBlog = getAllBlogs();
+        });
+      } else {
+        throw "${response.data['message']}";
+      }
+    } catch (err) {
+      rethrow;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,8 +83,8 @@ class _HomeFragmentState extends State<HomeFragment> {
             });
           }
         },
-        label: Text('Create'),
-        icon: Icon(Icons.add),
+        label: const Text('Create'),
+        icon: const Icon(Icons.add),
       ),
       body: Column(
         children: [
@@ -106,7 +125,62 @@ class _HomeFragmentState extends State<HomeFragment> {
                         padding: const EdgeInsets.all(16),
                         itemCount: data.length,
                         separatorBuilder: (c, i) => const SizedBox(height: 16),
-                        itemBuilder: (c, i) => BlogCard(data[i]),
+                        itemBuilder: (c, i) => BlogCard(
+                          data[i],
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (c) => Dialog(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Padding(
+                                        padding: EdgeInsets.all(16.0),
+                                        child: Text(
+                                          "Are you sure you want to delete this blog?",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: OutlinedButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: const Text("No"),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 16),
+                                            Expanded(
+                                              child: ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                  // code for delete'
+                                                  handleDeleteBlog(data[i].id!);
+                                                },
+                                                child: const Text("Yes"),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       );
                     }
                   }

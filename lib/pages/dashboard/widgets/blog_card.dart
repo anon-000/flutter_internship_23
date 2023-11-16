@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/data_models/blog.dart';
+import 'package:flutter_demo/utils/sharedpreference_helper.dart';
 import 'package:intl/intl.dart';
 
 ///
@@ -8,8 +9,9 @@ import 'package:intl/intl.dart';
 
 class BlogCard extends StatelessWidget {
   final BlogDatum datum;
+  final VoidCallback? onTap;
 
-  const BlogCard(this.datum, {Key? key}) : super(key: key);
+  const BlogCard(this.datum, {Key? key, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +42,39 @@ class BlogCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.network(
-              "${datum.attachment}",
-              fit: BoxFit.cover,
-              height: 300,
-              width: double.infinity,
+            Stack(
+              children: [
+                Image.network(
+                  "${datum.attachment}",
+                  fit: BoxFit.cover,
+                  height: 300,
+                  width: double.infinity,
+                ),
+                Positioned(
+                  top: 10,
+                  right: 10,
+                  child: datum.createdBy!.id ==
+                          SharedPreferenceHelper.authenticationData!.user!.id
+                      ? Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                          child: IconButton(
+                            onPressed: onTap,
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                          ),
+                        )
+                      : const SizedBox(),
+                ),
+              ],
             ),
             const SizedBox(height: 10),
+            // Text("${datum.createdBy!.id}"),
+            // Text("${SharedPreferenceHelper.authenticationData!.user!.id}"),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Text(

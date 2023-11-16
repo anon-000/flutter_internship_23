@@ -43,6 +43,7 @@ dependencies:
   http: ^0.13.6
   intl: ^0.18.1
   dio: ^5.3.3
+  timeago: ^3.6.0
 
 dev_dependencies:
   flutter_test:
