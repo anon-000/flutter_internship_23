@@ -10,20 +10,25 @@ import 'package:intl/intl.dart';
 class BlogCard extends StatelessWidget {
   final BlogDatum datum;
   final VoidCallback? onTap;
+  final VoidCallback? onRefresh;
 
-  const BlogCard(this.datum, {Key? key, this.onTap}) : super(key: key);
+  const BlogCard(this.datum, {Key? key, this.onTap, this.onRefresh})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.pushNamed(
+      onTap: () async {
+        final res = await Navigator.pushNamed(
           context,
           '/blog-details-page',
           arguments: {
             "id": datum.id,
           },
         );
+        if (onRefresh != null) {
+          onRefresh!.call();
+        }
       },
       child: Container(
         clipBehavior: Clip.antiAlias,

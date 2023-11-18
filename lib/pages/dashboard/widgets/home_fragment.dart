@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ class HomeFragment extends StatefulWidget {
 
 class _HomeFragmentState extends State<HomeFragment> {
   late Future<List<BlogDatum>?> futureBlog;
+  String searchQuery = "";
 
   @override
   void initState() {
@@ -29,7 +31,7 @@ class _HomeFragmentState extends State<HomeFragment> {
   Future<List<BlogDatum>?> getAllBlogs() async {
     try {
       final response = await http.get(Uri.parse(
-          'https://api.dev.thepatchupindia.in/v1/blog?\$limit=-1&\$populate=createdBy&\$sort[createdAt]=-1'));
+          'https://api.dev.thepatchupindia.in/v1/blog?\$limit=-1&\$populate=createdBy&\$sort[createdAt]=-1&search=$searchQuery'));
 
       if (response.statusCode == 200) {
         // log("RESPONSE  : : ${jsonDecode(response.body)}");
@@ -42,6 +44,7 @@ class _HomeFragmentState extends State<HomeFragment> {
 
         // return AlbumDatum.fromJson(jsonDecode(response.body));
       } else {
+        log("${jsonDecode(response.body)['message']}");
         throw "${jsonDecode(response.body)['message']}";
       }
     } catch (err) {
@@ -98,6 +101,14 @@ class _HomeFragmentState extends State<HomeFragment> {
             ),
             backgroundColor: Colors.white,
           ),
+          // TextField(
+          //   onChanged: (c){
+          //     searchQuery = c;
+          //     setState(() {
+          //       futureBlog = getAllBlogs();
+          //     });
+          //   },
+          // ),
           Expanded(
             child: RefreshIndicator(
               onRefresh: () async {

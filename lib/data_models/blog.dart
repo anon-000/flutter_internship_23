@@ -8,6 +8,7 @@
 
 import 'dart:convert';
 
+import 'package:flutter_demo/data_models/favorite.dart';
 import 'package:flutter_demo/data_models/user.dart';
 
 BlogDatum blogDatumFromJson(String str) => BlogDatum.fromJson(json.decode(str));
@@ -20,6 +21,7 @@ class BlogDatum {
   String? description;
   String? attachment;
   User? createdBy;
+  FavoriteDatum? favorite;
   DateTime? createdAt;
   DateTime? updatedAt;
   int? v;
@@ -32,6 +34,7 @@ class BlogDatum {
     this.createdBy,
     this.createdAt,
     this.updatedAt,
+    this.favorite,
     this.v,
   });
 
@@ -40,8 +43,14 @@ class BlogDatum {
         title: json["title"],
         description: json["description"],
         attachment: json["attachment"],
-        createdBy:
-            json["createdBy"] == null ? null : User.fromJson(json["createdBy"]),
+        createdBy: json["createdBy"] == null
+            ? null
+            : User.fromJson(json["createdBy"] is String
+                ? {"_id": json["createdBy"]}
+                : json["createdBy"]),
+        favorite: json["favorite"] == null
+            ? null
+            : FavoriteDatum.fromJson(json["favorite"]),
         createdAt: json["createdAt"] == null
             ? null
             : DateTime.parse(json["createdAt"]),
@@ -57,6 +66,7 @@ class BlogDatum {
         "description": description,
         "attachment": attachment,
         "createdBy": createdBy!.toJson(),
+        "favorite": favorite!.toJson(),
         "createdAt": createdAt?.toIso8601String(),
         "updatedAt": updatedAt?.toIso8601String(),
         "__v": v,

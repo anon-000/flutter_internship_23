@@ -5,8 +5,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/data_models/blog.dart';
 import 'package:flutter_demo/data_models/comment.dart';
+import 'package:flutter_demo/data_models/favorite.dart';
 import 'package:flutter_demo/pages/blogs/widgets/add_comment_sheet.dart';
 import 'package:flutter_demo/pages/blogs/widgets/comment_tile.dart';
+import 'package:flutter_demo/utils/sharedpreference_helper.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
@@ -27,6 +29,11 @@ class _BlogDetailsPageState extends State<BlogDetailsPage> {
   late Future<BlogDatum?> futureBlog;
   late Future<List<CommentDatum>?> futureComment;
   String blogId = '';
+  bool loading = false;
+  final Dio dio = Dio();
+
+  /// way 2
+  BlogDatum? blogDatum;
 
   @override
   void initState() {
@@ -54,7 +61,8 @@ class _BlogDetailsPageState extends State<BlogDetailsPage> {
       // log("RESPONSE  : : ${response.data}");
       if (response.statusCode == 200) {
         // log("RESPONSE  : : ${response.data}");
-        return BlogDatum.fromJson(response.data);
+        blogDatum = BlogDatum.fromJson(response.data);
+        return blogDatum;
       } else {
         throw "${response.data['message']}";
       }
@@ -100,6 +108,71 @@ class _BlogDetailsPageState extends State<BlogDetailsPage> {
     }
   }
 
+  addToFavorite(String blogId) async {
+    // POST API
+    try {
+      setState(() {
+        loading = true;
+      });
+      dio.options.headers['Authorization'] =
+          SharedPreferenceHelper.authenticationData!.accessToken!;
+      Map<String, dynamic> body = {
+        "blog": blogId,
+        "createdBy": "${SharedPreferenceHelper.authenticationData!.user!.id}",
+      };
+      // log("body: $body");
+      final response = await dio.post(
+        "https://api.dev.thepatchupindia.in/v1/blog-favorite",
+        data: body,
+      );
+
+      log("${response.data}");
+
+      setState(() {
+        // futureBlog = getBlogDetails();
+        loading = false;
+        blogDatum!.favorite = FavoriteDatum.fromJson(response.data);
+      });
+    } catch (err, s) {
+      log("$err : $s");
+      setState(() {
+        loading = false;
+      });
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("$err")));
+    }
+  }
+
+  removeFromFavorite(String favoriteId) async {
+    /// DELETE API
+    try {
+      setState(() {
+        loading = true;
+      });
+      dio.options.headers['Authorization'] =
+          SharedPreferenceHelper.authenticationData!.accessToken!;
+
+      final response = await dio.delete(
+        "https://api.dev.thepatchupindia.in/v1/blog-favorite/$favoriteId",
+      );
+
+      log("${response.data}");
+
+      setState(() {
+        // futureBlog = getBlogDetails();
+        loading = false;
+        blogDatum!.favorite = null;
+      });
+    } catch (err, s) {
+      log("$err : $s");
+      setState(() {
+        loading = false;
+      });
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("$err")));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,8 +180,8 @@ class _BlogDetailsPageState extends State<BlogDetailsPage> {
         title: const Text("Blog Details"),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        icon: Icon(Icons.add),
-        label: Text("Add Comment"),
+        icon: const Icon(Icons.add),
+        label: const Text("Add Comment"),
         onPressed: () async {
           final res = await showModalBottomSheet(
             context: context,
@@ -149,13 +222,37 @@ class _BlogDetailsPageState extends State<BlogDetailsPage> {
                 // if we got our data
               } else if (snapshot.hasData) {
                 // Extracting data from snapshot object
-                final datum = snapshot.data as BlogDatum;
+                final datum = blogDatum!;
                 return ListView(
                   children: [
-                    Image.network(
-                      "${datum.attachment}",
-                      height: 250,
-                      fit: BoxFit.cover,
+                    Stack(
+                      children: [
+                        Image.network(
+                          "${datum.attachment}",
+                          height: 250,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                        ),
+                        Positioned(
+                          bottom: 16,
+                          right: 16,
+                          child: FloatingActionButton(
+                            child: Icon(
+                              Icons.favorite,
+                              color: datum.favorite == null
+                                  ? Colors.white
+                                  : Colors.red,
+                            ),
+                            onPressed: () {
+                              if (datum.favorite == null) {
+                                addToFavorite(datum.id!);
+                              } else {
+                                removeFromFavorite(datum.favorite!.id!);
+                              }
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 10),
                     Padding(
@@ -213,15 +310,24 @@ class _BlogDetailsPageState extends State<BlogDetailsPage> {
                           } else if (ss.hasData) {
                             // Extracting data from snapshot object
                             final comments = ss.data as List<CommentDatum>;
-                            return ListView.separated(
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              padding: const EdgeInsets.all(16),
-                              itemCount: comments.length,
-                              separatorBuilder: (c, i) =>
-                                  const SizedBox(height: 16),
-                              itemBuilder: (c, i) => CommentTile(comments[i]),
-                            );
+                            return comments.isEmpty
+                                ? const SizedBox(
+                                    height: 200,
+                                    child: Center(
+                                      child: Text("No comments found"),
+                                    ),
+                                  )
+                                : ListView.separated(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    padding: const EdgeInsets.all(16),
+                                    itemCount: comments.length,
+                                    separatorBuilder: (c, i) =>
+                                        const SizedBox(height: 16),
+                                    itemBuilder: (c, i) =>
+                                        CommentTile(comments[i]),
+                                  );
                           }
                         }
                         return const Center(
